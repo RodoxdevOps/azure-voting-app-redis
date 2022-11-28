@@ -23,7 +23,13 @@ stages:
     - task: Docker@2
       displayName: Build an image
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/azure-vote/Dockerfile'
-        tags: |
-          $(tag)
+        containerRegistry: 'ACR'
+        repository: 'azure-vote'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/azure-vote/Dockerfile'
+        tags: 'latest'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'build'
+        publishLocation: 'pipeline'
